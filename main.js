@@ -9,6 +9,7 @@ class Buscaminas {
     this.timerIniciado = false;
     this.minasMarcadas = 0;
     this.celdasDescubiertas = 0;
+    this.primerClick = true;
     this.celdasSinMina = this.filas * this.columnas - this.minas;
     this.handleClick = this.handleClick.bind(this);
     this.handleContextMenu = this.handleContextMenu.bind(this);
@@ -49,6 +50,7 @@ class Buscaminas {
       let columna = Math.floor(Math.random() * this.columnas);
       if (!this.tablero[fila][columna].tieneMina && !(fila == 0 && columna == 0)) {
         this.tablero[fila][columna].tieneMina = true;
+        console.log("mina: ", fila, columna);
         minasColocadas++;
         // let celda = document.getElementById(`f${fila}_c${columna}`);
         // celda.classList.add("mina");
@@ -87,6 +89,20 @@ class Buscaminas {
   }
 
   descubrir(e) {
+    if (this.primerClick) {
+      this.primerClick = false;
+      let casilla = e.currentTarget;
+      let fila = parseInt(casilla.dataset.fila);
+      let columna = parseInt(casilla.dataset.columna);
+
+      // Si tiene mina, la reubico para no perder en el 1er intento
+      const celda = this.tablero[fila][columna];
+      if (celda.tieneMina) {
+        console.log("tiene mina, reubicar");
+        this.reubicarMina(fila, columna);
+      }
+    }
+
     // iniciar Timer
     if (!this.timerIniciado) {
       this.iniciarTimer();
@@ -138,6 +154,27 @@ class Buscaminas {
       const i = fila + dx;
       const j = columna + dy;
       if (i >= 0 && i < this.filas && j >= 0 && j < this.columnas) this.descubrirRecursivo(i, j);
+    }
+  }
+
+  reubicarMina(fila, columna) {
+    let minaReubicada = false;
+    let intentos = 0;
+    while (!minaReubicada && intentos < 100) {
+      let nuevaFila = Math.floor(Math.random() * this.filas);
+      let nuevaColumna = Math.floor(Math.random() * this.columnas);
+      if (!this.tablero[nuevaFila][nuevaColumna].tieneMina && !(nuevaFila == fila && nuevaColumna == columna)) {
+        this.tablero[nuevaFila][nuevaColumna].tieneMina = true;
+        minaReubicada = true;
+        console.log("nueva mina:", nuevaFila, nuevaColumna);
+      }
+      intentos++;
+    }
+    console.log("mina reubicada", minaReubicada);
+    // Recalcular las minas alrededor de las celdas luego de reubicar la mina
+    if (minaReubicada) {
+      this.tablero[fila][columna].tieneMina = false;
+      this.calcularMinasAlrededor();
     }
   }
 
@@ -245,9 +282,9 @@ class Buscaminas {
     this.timerIniciado = false;
     this.minasMarcadas = 0;
     this.celdasDescubiertas = 0;
+    this.primerClick = true;
     this.tablero = [];
-
-    const nuevoJuego = new Buscaminas(this.filas, this.columnas, this.minas);
+    this.iniciar();
   }
 
   marcarCeldaBandera(fila, columna) {
@@ -289,7 +326,26 @@ class Buscaminas {
 }
 
 // Inicio
-const filas = 8;
-const columnas = 8;
-const minas = 10;
-const buscaminas = new Buscaminas(filas, columnas, minas);
+const tamanios = {
+  sm: { filas: 8, columnas: 8, minas: 10 },
+  md: { filas: 16, columnas: 16, minas: 40 },
+  lg: { filas: 16, columnas: 30, minas: 99 },
+};
+
+let juegoActual = new Buscaminas(tamanios.sm.filas, tamanios.sm.columnas, tamanios.sm.minas);
+
+document.getElementById("jugar").addEventListener("click", () => {
+  const tamanioSeleccionado = document.getElementById("selector-tamanio").value;
+  console.log("tamanioSeleccionado", tamanioSeleccionado);
+  const config = tamanios[tamanioSeleccionado];
+
+  // Limpiar si ya hay un juego
+  const tablero = document.getElementById("tablero");
+  tablero.innerHTML = "";
+
+  // Crear nuevo juego
+  juegoActual = new Buscaminas(config.filas, config.columnas, config.minas);
+
+  tablero.classList = "tablero";
+  tablero.classList.add(`tablero-${tamanioSeleccionado}`);
+});

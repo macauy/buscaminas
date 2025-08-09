@@ -3,8 +3,9 @@
   --columnas-sm: 8;
   --filas-md: 16;
   --columnas-md: 16;
-  --filas-lg: 20;
-  --columnas-lg: 24;
+  --filas-lg: 16;
+  --columnas-lg: 30;
+  --cell-size-sm: 32px;
   --cell-size: 30px;
   --border-color: #6c6c6c; /* Color gris claro para bordes */
   --background-color: #d3d3d3; /* Color gris claro para celdas */
@@ -86,16 +87,16 @@ body {
 }
 
 .tablero-sm {
-  grid-template-columns: repeat(var(--columnas-sm), 32px);
-  grid-template-rows: repeat(var(--filas-sm), 32px);
+  grid-template-columns: repeat(var(--columnas-sm), var(--cell-size-sm));
+  grid-template-rows: repeat(var(--filas-sm), var(--cell-size-sm));
 }
 .tablero-md {
-  grid-template-columns: repeat(var(--columnas-md), 32px);
-  grid-template-rows: repeat(var(--filas-md), 32px);
+  grid-template-columns: repeat(var(--columnas-md), var(--cell-size));
+  grid-template-rows: repeat(var(--filas-md), var(--cell-size));
 }
 .tablero-lg {
-  grid-template-columns: repeat(var(--columnas-lg), 32px);
-  grid-template-rows: repeat(var(--filas-lg), 32px);
+  grid-template-columns: repeat(var(--columnas-lg), var(--cell-size));
+  grid-template-rows: repeat(var(--filas-lg), var(--cell-size));
 }
 /*
 .celda {
@@ -196,4 +197,54 @@ body {
   font-weight: bold;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tamanio {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#selector-tamanio {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 2px solid #808080;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#selector-tamanio:hover {
+  background-color: #dcdcdc;
+}
+#selector-tamanio {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 2px solid #808080;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#selector-tamanio:hover {
+  background-color: #dcdcdc;
+}
+
+#jugar {
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#jugar:hover {
+  background-color: #45a049;
 }
