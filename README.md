@@ -7,7 +7,7 @@
 
 🎮 Versión web del clásico **Buscaminas**, desarrollada con **JavaScript, HTML y CSS**, usando **clases y módulos** para mantener la lógica y la interfaz separadas.
 
-<a target="_blank" href="https://macauy.github.io/buscaminas/" >Probar Juego</a> 🚀
+<a target="_blank" href="https://macauy.github.io/buscaminas/" >Probar Juego Online</a> 🚀
 
 ---
 
